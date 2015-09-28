@@ -1,0 +1,12 @@
+<ion-view view-title="Pessoas">
+	<ion-content class="">
+		<ion-list>
+			<ion-item ng-repeat="pessoa in pessoas | orderBy:'name'">
+				{{ pessoa.name }}
+					<span class="item-note" ng-click="addFriend(pessoa)">
+						Adicionar
+					</span>
+			</ion-item>
+		</ion-list>
+	</ion-content>
+</ion-view>

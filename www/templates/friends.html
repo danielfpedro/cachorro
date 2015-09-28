@@ -1,0 +1,9 @@
+<ion-view view-title="Amigos">
+	<ion-content class="">
+		<ion-list>
+			<ion-item ng-repeat="friend in friends | orderBy:'name'" href="#app/chat/{{friend.$id}}">
+				{{ friend.name }}
+			</ion-item>
+		</ion-list>
+	</ion-content>
+</ion-view>

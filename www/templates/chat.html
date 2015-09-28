@@ -1,0 +1,32 @@
+<ion-view view-title="Chat">
+	<ion-content class="has-footer">
+		<div >
+			Meu: {{me | json}}
+			<br>
+			Amigo: {{friendId | json}}
+			<div style="">
+				<ion-list>
+					<ion-item ng-repeat="message in messages | orderBy:'name'">
+						{{ message.text }}
+						<span class="item-note">
+							<span am-time-ago="message.timestamp"></span>
+						</span>
+					</ion-item>
+				</ion-list>
+				<div ng-if="!messages.length">
+					Você ainda não trocou nenhuma mensagem.
+				</div>
+			</div>
+		</div>
+	</ion-content>
+	<form ng-submit="sendMessage()">
+		<ion-footer-bar class="bar-stable item item-input-inset">
+			<label class="item-input-wrapper">
+				<input type="text" placeholder="Mensagem..." ng-model="message.text">
+			</label>
+			<button type="submit" class="button button-small">
+				Go
+			</button>
+		</ion-footer-bar>
+	</form>
+</ion-view>

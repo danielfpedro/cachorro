@@ -1,0 +1,13 @@
+<ion-view view-title="Meus Cachorros">
+	<ion-content class="">
+		<ion-list>
+			<ion-item ng-repeat="cachorro in cachorros | orderBy:'name'">
+				{{ cachorro.nome }}
+			</ion-item>
+		</ion-list>
+		<div ng-if="!cachorros">
+			Você ainda não adicionou nenhum cachorro.
+		</div>
+		<a href="#/app/add-cachorro">Adicionar</a>
+	</ion-content>
+</ion-view>

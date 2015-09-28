@@ -1,0 +1,22 @@
+<ion-view view-title="Entrar">
+	<ion-content class="">
+		<form name="my_form" ng-submit="doSimpleLogin()">
+			<div class="list">
+				<label class="item item-input item-stacked-label">
+					<span class="input-label">Email</span>
+					<input type="email" ng-model="user.email" required>
+				</label>
+				<label class="item item-input item-stacked-label">
+					<span class="input-label">Senha</span>
+					<input type="password" ng-model="user.password" required>
+				</label>
+			</div>
+			<div class="padding">
+				<button
+					ng-disabled="my_form.$pristine || my_form.$invalid"
+					type="submit"
+					class="button button-block button-positive">Entrar</button>	
+			</div>
+		</form>
+	</ion-content>
+</ion-view>
