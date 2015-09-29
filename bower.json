@@ -6,6 +6,7 @@
     "ionic": "driftyco/ionic-bower#1.1.0"
   },
   "dependencies": {
-    "a0-angular-storage": "~0.0.12"
+    "a0-angular-storage": "~0.0.12",
+    "angular-moment": "~0.10.3"
   }
 }

@@ -1,31 +1,38 @@
 <ion-view view-title="Chat">
-	<ion-content class="has-footer">
-		<div >
-			Meu: {{me | json}}
-			<br>
-			Amigo: {{friendId | json}}
-			<div style="">
-				<ion-list>
-					<ion-item ng-repeat="message in messages | orderBy:'name'">
-						{{ message.text }}
-						<span class="item-note">
-							<span am-time-ago="message.timestamp"></span>
-						</span>
-					</ion-item>
-				</ion-list>
-				<div ng-if="!messages.length">
-					Você ainda não trocou nenhuma mensagem.
+	<ion-content class="has-footer padding">
+		<div style="">
+			<div ng-repeat="message in messages">
+				<div class="row">
+					<div class="col" ng-class="{'text-right': me == message.sender}">
+						<div class="msg-bubble" ng-class="{'msg-bubble-sender': me == message.sender}">
+							<div class="row">
+								<div class="col">
+									{{ message.text }}
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col msg-time" ng-class="{'msg-time-sender': me == message.sender}">
+								{{message.timestamp | amDateFormat: 'HH:mm'}}
+							</div>
+						</div>
+					</div>
 				</div>
+			</div>
+			<div ng-if="!messages.length">
+				Você ainda não trocou nenhuma mensagem.
 			</div>
 		</div>
 	</ion-content>
-	<form ng-submit="sendMessage()">
+	<form name-"my_form" ng-submit="sendMessage()">
 		<ion-footer-bar class="bar-stable item item-input-inset">
 			<label class="item-input-wrapper">
-				<input type="text" placeholder="Mensagem..." ng-model="message.text">
+				<input type="text" placeholder="Mensagem..." ng-model="message.text" required>
 			</label>
-			<button type="submit" class="button button-small">
-				Go
+			<button
+				type="submit"
+				class="button button-small button-icon ion-ios-paperplane"
+				ng-hide="!message.text">
 			</button>
 		</ion-footer-bar>
 	</form>

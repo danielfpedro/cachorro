@@ -1,0 +1,22 @@
+.msg-bubble, .msg-bubble-sender{
+	background-color: $msg-bubble-color;
+	width: auto;
+	font-size: 16px;
+	color: $msg-bubble-font-color;
+	padding: $msg-bubble-padding;
+	display: inline-block;
+	text-align: left;
+	border-radius: $msg-bubble-border-radius;
+}
+.msg-time{
+	font-size: 10px!important;
+	text-align: left;
+}
+.msg-time-sender{
+	text-align: right;
+}
+.msg-bubble-sender{
+	/*float: right;*/
+	background-color: $msg-bubble-color-sender;
+	color: $msg-bubble-font-color-sender;
+}

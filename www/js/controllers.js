@@ -246,11 +246,15 @@ $cordovaFacebook.login(["public_profile", "email"])
                 .orderByChild('timestamp')
                 .limitToLast(20);
             $scope.messages = $firebaseArray(messages);
+            messages.on('child_added', function(){
+                $ionicScrollDelegate.scrollBottom();
+            });
         });
 
     });
 
     $scope.sendMessage = function(){
+        $scope.message.sender = store.get('me').uid;
         $scope.message.timestamp = Firebase.ServerValue.TIMESTAMP;
         $scope.messages.$add($scope.message);
         $scope.message = {};

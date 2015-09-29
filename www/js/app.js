@@ -10,7 +10,8 @@ angular.module('starter', [
     'starter.services',
     'firebase',
     'ngCordova',
-    'angular-storage'
+    'angular-storage',
+    'angularMoment'
 ])
 
 .constant('CONFIG', {
