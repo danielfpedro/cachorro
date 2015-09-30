@@ -82,12 +82,12 @@ angular.module('starter.services', [])
     	},
     	get: function(){
     		var defer = $q.defer();
-    		$firebaseArray(FirebaseRef.child('users'))
-	    		.$loaded()
-	    			.then(function(users){
-	    				store.set('pessoas', users);
-	    				defer.resolve(users);
-	    			});
+    		FirebaseRef
+    			.child('users')
+    			.child($rootScope.authData.uid)
+	    		.once('value', function(snap){
+	    			defer.resolve(snap.val());
+	    		});
     		return defer.promise;
     	}
     };

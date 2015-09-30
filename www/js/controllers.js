@@ -1,9 +1,7 @@
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $location, Auth) {
-    Auth.$onAuth(function(authData){
-        $scope.authData = authData;
-    });
+.controller('AppCtrl', function($scope, $rootScope, $ionicModal, $location, Auth) {
+
 })
 .controller('AddCachorroController', function(
     $scope,
@@ -169,18 +167,26 @@ $cordovaFacebook.login(["public_profile", "email"])
 .controller('PessoasController', function(
     $scope,
     Pessoas,
-    Friends
+    Friends,
+    $state,
+    $firebaseArray,
+    FirebaseRef,
+    Auth,
+    currentAuth,
+    $rootScope
 ) {
-
+    
     $scope.pessoas = [];
 
     $scope.$on( "$ionicView.beforeEnter", function(scopes, states) {
+        $scope.loading = true;
         $scope.pessoas = Pessoas.getCache();
-        Pessoas
-            .get()
-            .then(function(users){
-                $scope.pessoas = users;
-            });
+        console.log(currentAuth);
+        $scope.pessoas = $firebaseArray(
+            FirebaseRef.child('users'));
+        $scope.pessoas.$loaded().then(function(){
+            $scope.loading = false;
+        });
     });
 
     $scope.addFriend = function(newFriend){
@@ -259,6 +265,34 @@ $cordovaFacebook.login(["public_profile", "email"])
         $scope.messages.$add($scope.message);
         $scope.message = {};
         $ionicScrollDelegate.scrollBottom();
+    };
+})
+.controller('HomeController', function(
+    $scope,
+    $cordovaDialogs,
+    FirebaseRef,
+    Auth,
+    $state
+) {
+
+    $scope.doLogout = function(){
+        FirebaseRef.unauth();
+    };
+
+    $scope.doFacebookLogin = function(){
+        Auth.$authWithOAuthPopup("facebook")
+            .then(function(authData) {
+                console.log(authData);
+                FirebaseRef
+                    .child('users')
+                    .child(authData.uid)
+                    .set({
+                        name: authData.facebook.displayName,
+                        email: authData.facebook.email
+                    });
+            }, function(){
+                $cordovaDialogs.alert('Ocorreu um erro ao tentar entrar com o Facebook.', 'Erro');
+            });
     };
 })
 .controller('EmptyController', function($scope, $stateParams) {

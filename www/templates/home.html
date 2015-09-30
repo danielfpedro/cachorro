@@ -1,0 +1,18 @@
+<ion-view view-title="Login">
+  <ion-content class="padding">
+  	{{authData | json}}
+    <button
+        type="button"
+        class="button button-positive button-block"
+        ng-click="doFacebookLogin()">
+        <span class="icon ion-social-facebook"></span> Entrar com Facebook
+    </button>
+    <button
+        type="button"
+        class="button button-assertive button-block"
+        ng-click="doLogout()">
+        Sair
+    </button>
+    <a href="#/">Pessoas</a>
+  </ion-content>
+</ion-view>

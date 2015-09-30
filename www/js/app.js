@@ -4,6 +4,9 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
+
+var prod = false;
+
 angular.module('starter', [
     'ionic',
     'starter.controllers',
@@ -13,12 +16,29 @@ angular.module('starter', [
     'angular-storage',
     'angularMoment'
 ])
-
 .constant('CONFIG', {
-    FIREBASE_URL: 'https://api-cachorro.firebaseio.com/'
+    FIREBASE_URL: 'https://api-cachorro.firebaseio.com/',
+    HOME: 'home',
+    DEFAULT_VIEW: 'app.pessoas'
 })
 
-.run(function($ionicPlatform) {
+.run(function(CONFIG, $ionicPlatform, $state, $location, Auth, FirebaseRef, $rootScope) {
+    // Aqui é um watch para os dados do usuário logado, coloco no rootscope para ter acesso constante em qualquer lugar
+    $rootScope.authData = null;
+    Auth.$onAuth(function(authData){
+        $rootScope.authData = (authData) ? authData : null;
+    });
+
+    $rootScope.$on('$stateChangeStart', function(e, to){
+    });
+
+    $rootScope.$on("$routeChangeError", function(event, next, previous, error) {
+        if (error === "AUTH_REQUIRED") {
+            event.preventDefault();
+            $location.path(CONFIG.HOME);
+        }
+    });
+
     $ionicPlatform.ready(function() {
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
         // for form inputs)
@@ -87,7 +107,15 @@ angular.module('starter', [
         views: {
             'menuContent': {
                 templateUrl: 'templates/pessoas.html',
-                controller: 'PessoasController'
+                controller: 'PessoasController',
+                resolve: {
+                    'requireAuth': ['Auth', function(Auth){
+                        return Auth.$requireAuth();
+                    }],
+                    'currentAuth': ['Auth', function(Auth){
+                        return Auth.$waitForAuth();
+                    }]
+                }
             }
         }
     })
@@ -132,6 +160,13 @@ angular.module('starter', [
         templateUrl: 'templates/logout.html',
         controller: 'LogoutController'
     })
+    .state('home', {
+        url: '/home',
+        templateUrl: 'templates/home.html',
+        controller: 'HomeController',
+        resolve: {
+        }
+    })
     .state('app.criar-conta', {
         url: '/criar-conta',
         views: {
@@ -142,5 +177,15 @@ angular.module('starter', [
         }
     });
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/app/friends');
+    $urlRouterProvider.otherwise(function($injector, $location){
+        var Auth = $injector.get('Auth');
+        var state = $injector.get('$state');
+        var config = $injector.get('CONFIG');
+
+        if (Auth.$getAuth()) {
+            state.go(config.DEFAULT_VIEW);
+        } else {
+            state.go(config.HOME);
+        }
+    });
 });
